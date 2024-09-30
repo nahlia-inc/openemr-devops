@@ -1,0 +1,26 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: openemr
+  name: openemr-ingress
+spec:
+  tls:
+  - hosts:
+    - emr.nahlia.com
+    secretName: openemr-tls  # Ensure this secret contains your TLS certificate
+  rules:
+  - host: emr.nahlia.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: openemr
+            port:
+              number: 8080  # Serve HTTP traffic on port 80
